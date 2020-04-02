@@ -1,0 +1,37 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <!-- JDBC Database connection settings -->
+        <property name="connection.driver_class">org.postgresql.Driver</property>
+        <property name="connection.url">jdbc:postgresql://localhost:5432/postgres</property>
+        <property name="connection.username">postgres</property>
+        <property name="connection.password">demetra</property>
+        <!-- JDBC connection pool settings ... using built-in test pool -->
+        <!-- <property name="connection.pool_size">20</property> -->
+        <property name="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
+        <property name="hibernate.c3p0.min__size">5</property>
+        <property name="hibernate.c3p0.max__size">20</property>
+        <property name="hibernate.c3p0.acquire__increment">5</property>
+        <property name="hibernate.c3p0.timeout">300</property>
+        <property name="hibernate.c3p0.max__statements">50</property>
+        <property name="hibernate.c3p0.idle__test__period">3000</property>
+        <!-- Select our SQL dialect -->
+        <property name="dialect">org.hibernate.dialect.PostgreSQL9Dialect</property> <!-- DB Dialect -->
+        <property name="hbm2ddl.auto">create-drop</property> <!-- create / create-drop / update -->
+
+        <property name="show_sql">true</property> <!-- Show SQL in console -->
+        <property name="format_sql">true</property> <!-- Show SQL formatted -->
+        <property name="hibernate.current_session_context_class">thread</property>
+        
+        <!-- batching size -->
+        <property name="hibernate.jdbc.batch_size">50</property>
+        <property name="hibernate.order_inserts">true</property>
+        <property name="hibernate.order_updates">true</property>
+        <property name="hibernate.jdbc.batch_versioned_data">true</property>
+    
+
+
+    </session-factory>
+</hibernate-configuration>
