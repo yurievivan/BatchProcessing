@@ -9,7 +9,8 @@ import java.sql.Statement;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -17,7 +18,7 @@ import org.apache.log4j.Logger;
  */
 public class CallStoredProcedure extends BatchExecutor {
 
-    private static final Logger LOG = Logger.getLogger(CallStoredProcedure.class);
+    private static final Logger LOG = LogManager.getLogger(CallStoredProcedure.class);
     private final static int BATCH_SIZE = 50;
     private final static String TABLE_NAME = "book";
     private final static String PROCEDURE_NAME = "insert_book";

@@ -24,48 +24,6 @@ public class App {
             books.get(i).setTitle("Hibernate Update Example: " + i);
         }
         dao.updateBooks(books);
-        
-        System.out.println(dao.getBook(50L));
-        
-        /*
 
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-
-        // - - - - - - - - - - - - - - Hibernate/JPA Batch Insert example - - - - - - - - - - - -
-        Session session = sessionFactory.getCurrentSession();
-        Transaction transaction = null;
-        transaction = session.getTransaction();
-        transaction.begin();
-        for (int i = 0; i < 1000; i++) {
-            Book book = new Book("Hibernate/JPA Batch Insert Example: " + i);
-            session.persist(book);
-
-            if ((i+1) % BATCH_SIZE == 0) {
-                // Flush and clear the cache every batch
-                session.flush();
-                session.clear();
-            }
-        }
-        transaction.commit();
-
-        // - - - - - - - - - - - - - - Hibernate/JPA Batch Update example - - - - - - - - - - - -
-        session = sessionFactory.getCurrentSession();
-        transaction = session.getTransaction();
-        transaction.begin();
-        List<Book> books = session.createQuery("From Book", Book.class).getResultList();
-
-        for (int i = 0; i < books.size(); i++) {
-            Book book = books.get(i);
-            book.setTitle("Hibernate/JPA Batch Update Example: " + i);
-            session.update(book);
-
-            if ((i+1) % BATCH_SIZE == 0) {
-                // Flush and clear the cache every batch
-                session.flush();
-                session.clear();
-            }
-        }
-
-        transaction.commit();*/
     }
 }

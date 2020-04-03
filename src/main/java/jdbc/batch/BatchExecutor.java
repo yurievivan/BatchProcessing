@@ -1,10 +1,9 @@
 package jdbc.batch;
 
-import java.sql.BatchUpdateException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -20,21 +19,28 @@ public class BatchExecutor {
         batchUpdateLog = new BatchUpdateLog(log);
     }
 
-    void executeBatch(Connection connection, Statement stmt) throws SQLException {
+    void executeBatch(Connection connection, Statement stmt) {
         try {
             int[] result = stmt.executeBatch();
             log.info("Number of rows affected: " + result.length);
             connection.commit();
             batchUpdateLog.clear();
-        } catch (BatchUpdateException ex) {
-            batchUpdateLog.log(ex);
-            batchUpdateLog.clear();
-            connection.rollback();
+        } catch (SQLException ex) {
+            log(connection, ex);
         }
     }
 
     BatchUpdateLog getBatchUpdateLog() {
         return batchUpdateLog;
+    }
+
+    private void log(Connection connection, SQLException ex) {
+        try {
+            batchUpdateLog.log(ex);
+            connection.rollback();
+        } catch (SQLException sqlEx) {
+            log.error(sqlEx);
+        }
     }
 
 }

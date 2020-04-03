@@ -1,16 +1,16 @@
 package jdbc.batch;
 
-import java.sql.BatchUpdateException;
-import java.sql.Statement;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
  * @author ivan.yuriev
  */
 public class BatchUpdateLog {
+
     private final List<String> sqlQueries = new CopyOnWriteArrayList<>();
     private final Logger log;
 
@@ -18,19 +18,15 @@ public class BatchUpdateLog {
         this.log = log;
     }
 
-    public synchronized void log(BatchUpdateException ex) {
+    public synchronized void log(SQLException ex) {
         if (ex == null) return;
         log.error(ex);
-        int[] updateCount = ex.getUpdateCounts();
-        boolean isShowData = updateCount != null && sqlQueries.size() == updateCount.length;
-        if (!isShowData) return;
-        for (int j = 0; j < updateCount.length; j++) {
-            if (updateCount[j] == Statement.EXECUTE_FAILED) {
-                log.error(sqlQueries.get(j));
-            }
-        }
+        sqlQueries.stream().forEach((query) -> {
+            log.error(query);
+        });
+        sqlQueries.clear();
     }
-    
+
     public void add(String query) {
         sqlQueries.add(query);
     }

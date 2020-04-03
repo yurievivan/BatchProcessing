@@ -8,7 +8,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -16,7 +17,7 @@ import org.apache.log4j.Logger;
  */
 public class BookDaoPreparedStatement extends BatchExecutor implements Dao<Book> {
 
-    private static final Logger LOG = Logger.getLogger(BookDaoPreparedStatement.class);
+    private static final Logger LOG = LogManager.getLogger(BookDaoPreparedStatement.class);
     private static final int BATCH_SIZE = 50;
     private static final String QUERY = "Query:";
 

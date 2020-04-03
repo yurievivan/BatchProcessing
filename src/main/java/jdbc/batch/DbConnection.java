@@ -9,7 +9,8 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class DbConnection {
 
@@ -18,7 +19,7 @@ public class DbConnection {
      * @author ivan.yuriev
      */
     
-    private static final Logger LOG = Logger.getLogger(DbConnection.class);
+    private static final Logger LOG = LogManager.getLogger(DbConnection.class);
     private static final String CONNECTION_PROPERTY_FILE = "connection.properties";
     private static Connection con = null;
     private static String url;
