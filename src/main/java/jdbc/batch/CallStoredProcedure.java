@@ -19,17 +19,17 @@ import org.apache.logging.log4j.Logger;
 public class CallStoredProcedure extends BatchExecutor {
 
     private static final Logger LOG = LogManager.getLogger(CallStoredProcedure.class);
-    private final static int BATCH_SIZE = 50;
-    private final static String TABLE_NAME = "book";
-    private final static String PROCEDURE_NAME = "insert_book";
-    private final static String COMMAND = "call insert_book(?)";
-    private final static String DROP_TABLE = "DROP table if exists book";
-    private final static String CREATE_TABLE = "create table book ( "
+    private static final int BATCH_SIZE = 50;
+    private static final String TABLE_NAME = "book";
+    private static final String PROCEDURE_NAME = "insert_book";
+    private static final String COMMAND = "call insert_book(?)";
+    private static final String DROP_TABLE = "DROP table if exists book";
+    private static final String CREATE_TABLE = "create table book ( "
                                                         + " id  bigserial not null, "
                                                         + " title varchar(50), "
                                                         + " primary key (id) "
                                                         + ")";
-    private final static String CREATE_PROCEDURE = "CREATE PROCEDURE insert_book(bookTitle varchar(50)) "
+    private static final String CREATE_PROCEDURE = "CREATE PROCEDURE insert_book(bookTitle varchar(50)) "
                                                         + "AS $$ "
                                                         + "BEGIN "
                                                         + "   INSERT INTO book(title) "
@@ -119,8 +119,9 @@ public class CallStoredProcedure extends BatchExecutor {
 
     private void executeQuery(String query) {
         try (Connection connection = DbConnection.getConnection()) {
-            Statement stmt = connection.createStatement();
-            stmt.executeQuery(query);
+            try (Statement stmt = connection.createStatement()) {
+                stmt.executeQuery(query);
+            }
         } catch (SQLException ex) {
             LOG.error(ex);
         }

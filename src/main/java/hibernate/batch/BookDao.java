@@ -12,9 +12,9 @@ import org.hibernate.Transaction;
  */
 public class BookDao implements Dao<Book> {
 
-    private final static int BATCH_SIZE = 50;
-    private final static String DROP_TABLE = "DROP table if exists book";
-    private final static String CREATE_TABLE = "create table book ( "
+    private static final int BATCH_SIZE = 50;
+    private static final String DROP_TABLE = "DROP table if exists book";
+    private static final String CREATE_TABLE = "create table book ( "
             + " id  bigserial not null, "
             + " title varchar(50), "
             + " primary key (id) "
@@ -39,7 +39,7 @@ public class BookDao implements Dao<Book> {
     public List<Book> getAllBooks() {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
-        List<Book> books = (List<Book>) session.createQuery("From Book").list();
+        List<Book> books = session.createQuery("From Book").list();
         session.getTransaction().commit();
         return books;
     }

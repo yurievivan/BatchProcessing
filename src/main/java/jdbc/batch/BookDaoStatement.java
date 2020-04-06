@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,15 +18,15 @@ import org.apache.logging.log4j.Logger;
 public class BookDaoStatement extends BatchExecutor implements Dao<Book> {
 
     private static final Logger LOG = LogManager.getLogger(BookDaoStatement.class);
-    private final static int BATCH_SIZE = 50;
-    private final static String SELECT_ALL = "SELECT * FROM book";
-    private final static String SELECT_BY_ID = "SELECT * FROM book WHERE id = %d";
-    private final static String INSERT = "INSERT INTO book (title) VALUES ( '%s')";
-    private final static String UPDATE = "UPDATE book SET title = '%s' WHERE id = %d";
-    private final static String DELETE_BY_ID = "DELETE FROM book WHERE id = %d";
-    private final static String DELETE_BY_TITLE = "DELETE FROM book WHERE title = '%s'";
-    private final static String DROP_TABLE = "DROP table if exists book";
-    private final static String CREATE_TABLE = "create table book ( "
+    private static final int BATCH_SIZE = 50;
+    private static final String SELECT_ALL = "SELECT * FROM book";
+    private static final String SELECT_BY_ID = "SELECT * FROM book WHERE id = %d";
+    private static final String INSERT = "INSERT INTO book (title) VALUES ( '%s')";
+    private static final String UPDATE = "UPDATE book SET title = '%s' WHERE id = %d";
+    private static final String DELETE_BY_ID = "DELETE FROM book WHERE id = %d";
+    private static final String DELETE_BY_TITLE = "DELETE FROM book WHERE title = '%s'";
+    private static final String DROP_TABLE = "DROP table if exists book";
+    private static final String CREATE_TABLE = "create table book ( "
             + " id  bigserial not null, "
             + " title varchar(50), "
             + " primary key (id) "
@@ -38,13 +39,15 @@ public class BookDaoStatement extends BatchExecutor implements Dao<Book> {
     @Override
     public Book getBook(long id) {
         try (Connection connection = DbConnection.getConnection()) {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(String.format(SELECT_BY_ID, id));
-            if (rs.next()) {
-                Book book = new Book();
-                book.setId(rs.getLong("id"));
-                book.setTitle(rs.getString("title"));
-                return book;
+            try (Statement stmt = connection.createStatement()) {
+                try (ResultSet rs = stmt.executeQuery(String.format(SELECT_BY_ID, id))) {
+                    if (rs.next()) {
+                        Book book = new Book();
+                        book.setId(rs.getLong("id"));
+                        book.setTitle(rs.getString("title"));
+                        return book;
+                    }
+                }
             }
         } catch (SQLException ex) {
             LOG.error(ex);
@@ -55,37 +58,37 @@ public class BookDaoStatement extends BatchExecutor implements Dao<Book> {
     @Override
     public List<Book> getAllBooks() {
         try (Connection connection = DbConnection.getConnection()) {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(SELECT_ALL);
-            List<Book> books = new ArrayList<>();
-            while (rs.next()) {
-                Book book = new Book();
-                book.setId(rs.getLong("id"));
-                book.setTitle(rs.getString("title"));
-                books.add(book);
+            try ( Statement stmt = connection.createStatement()) {
+                try (ResultSet rs = stmt.executeQuery(SELECT_ALL)) {
+                    List<Book> books = new ArrayList<>();
+                    while (rs.next()) {
+                        Book book = new Book();
+                        book.setId(rs.getLong("id"));
+                        book.setTitle(rs.getString("title"));
+                        books.add(book);
+                    }
+                    return books;
+                }
             }
-            return books;
         } catch (SQLException ex) {
             LOG.error(ex);
         }
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
     public void insertBooks(List<Book> books) {
         List<String> queries = new ArrayList<>();
-        books.stream().forEach((book) -> {
-            queries.add(String.format(INSERT, book.getTitle()));
-        });
+        books.stream().forEach(book -> 
+            queries.add(String.format(INSERT, book.getTitle())));
         addBatchQueries(queries);
     }
 
     @Override
     public void updateBooks(List<Book> books) {
         List<String> queries = new ArrayList<>();
-        books.stream().forEach((book) -> {
-            queries.add(String.format(UPDATE, book.getTitle(), book.getId()));
-        });
+        books.stream().forEach(book -> 
+            queries.add(String.format(UPDATE, book.getTitle(), book.getId())));
         addBatchQueries(queries);
     }
 
@@ -112,8 +115,9 @@ public class BookDaoStatement extends BatchExecutor implements Dao<Book> {
     
     private void executeQuery(String query) {
         try (Connection connection = DbConnection.getConnection()) {
-            Statement stmt = connection.createStatement();
-            stmt.executeQuery(query);
+            try (Statement stmt = connection.createStatement()) {
+                stmt.executeQuery(query);
+            }
         } catch (SQLException ex) {
             LOG.error(ex);
         }

@@ -21,9 +21,7 @@ public class BatchUpdateLog {
     public synchronized void log(SQLException ex) {
         if (ex == null) return;
         log.error(ex);
-        sqlQueries.stream().forEach((query) -> {
-            log.error(query);
-        });
+        sqlQueries.stream().forEach(log::error);
         sqlQueries.clear();
     }
 

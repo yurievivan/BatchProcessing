@@ -13,6 +13,7 @@ public class BatchExecutor {
 
     private final Logger log;
     private final BatchUpdateLog batchUpdateLog;
+    private static final String NUMBER_ROWS = "Number of rows affected: %d";
 
     public BatchExecutor(Logger log) {
         this.log = log;
@@ -22,7 +23,8 @@ public class BatchExecutor {
     void executeBatch(Connection connection, Statement stmt) {
         try {
             int[] result = stmt.executeBatch();
-            log.info("Number of rows affected: " + result.length);
+            String info = String.format(NUMBER_ROWS, result == null ? 0 : result.length);
+            log.info(info);
             connection.commit();
             batchUpdateLog.clear();
         } catch (SQLException ex) {

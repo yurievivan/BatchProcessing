@@ -9,6 +9,7 @@ import java.util.Objects;
 public class Book {
 
     private long id;
+
     private String title;
 
     public Book() {
@@ -35,32 +36,17 @@ public class Book {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 11 * hash + (int) (this.id ^ (this.id >>> 32));
-        hash = 11 * hash + Objects.hashCode(this.title);
-        return hash;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Book book = (Book) o;
+        return id == book.id &&
+                Objects.equals(title, book.title);
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Book other = (Book) obj;
-        if (this.id != other.id) {
-            return false;
-        }
-        if (!Objects.equals(this.title, other.title)) {
-            return false;
-        }
-        return true;
+    public int hashCode() {
+        return Objects.hash(id, title);
     }
 
     @Override
