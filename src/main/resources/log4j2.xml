@@ -25,5 +25,10 @@
             <AppenderRef ref="Console" />
             <AppenderRef ref="File" />
         </Logger>
+        
+        <Logger name="org.hibernate.stat" level="trace" additivity="false">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="File" />
+        </Logger>
     </Loggers>
 </Configuration>
