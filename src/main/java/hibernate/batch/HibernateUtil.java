@@ -16,7 +16,7 @@ public class HibernateUtil {
     }
 
     public static SessionFactory getSessionFactory() {
-        if (sessionFactory == null) {
+        if (sessionFactory == null || sessionFactory.isClosed()) {
             Configuration configuration = new Configuration().configure();
             configuration.addAnnotatedClass(Book.class);
             StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
@@ -24,4 +24,11 @@ public class HibernateUtil {
         }
         return sessionFactory;
     }
+
+    public static void close() {
+        if (sessionFactory != null && sessionFactory.isOpen()) {
+            sessionFactory.close();
+        }
+    }
+
 }
