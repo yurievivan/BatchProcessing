@@ -31,6 +31,7 @@
         <property name="hibernate.order_inserts">true</property>
         <property name="hibernate.order_updates">true</property>
         <property name="hibernate.jdbc.batch_versioned_data">true</property>
+        <property name="hibernate.id.new_generator_mappings">true</property>
         <!-- hibernate statistics -->
         <property name="hibernate.generate_statistics">true</property>
 
