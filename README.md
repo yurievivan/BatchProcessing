@@ -14,5 +14,6 @@
 <p><b>Source package: </b><a href="https://github.com/yurievivan/BatchProcessing/tree/master/src/main/java/hibernate/batch">hibernate.batch</a>.</p>
 <p><b>Entity: </b><a href="https://github.com/yurievivan/BatchProcessing/blob/master/src/main/java/hibernate/batch/Book.java">Book</a>.</p>
 <p><b>DAO: </b><a href="https://github.com/yurievivan/BatchProcessing/blob/master/src/main/java/hibernate/batch/BookDao.java">BookDao</a>.</p>
+<p><b>Config file: </b><a href="https://github.com/yurievivan/BatchProcessing/blob/master/src/main/resources/Hibernate.cfg.xml">Hibernate.cfg.xml</a>.</p>
 <hr>
 <h2 align="left">Publishing on Habrahabr: <a href="https://habr.com/ru/post/501756/">https://habr.com/ru/post/501756/</a></h1>
