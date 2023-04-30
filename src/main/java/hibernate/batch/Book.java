@@ -1,6 +1,6 @@
 package hibernate.batch;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  *

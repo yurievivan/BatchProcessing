@@ -127,7 +127,7 @@ public class BookDao implements Dao<Book> {
     private void executeQuery(String query) {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
-        session.createSQLQuery(query).executeUpdate();
+        session.createNativeQuery(query).executeUpdate();
         session.getTransaction().commit();
     }
 
