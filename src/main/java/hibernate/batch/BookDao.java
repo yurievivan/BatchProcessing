@@ -39,7 +39,7 @@ public class BookDao implements Dao<Book> {
     public List<Book> getAllBooks() {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
-        List<Book> books = session.createQuery("From Book").list();
+        List<Book> books = session.createQuery("From Book", Book.class).list();
         session.getTransaction().commit();
         return books;
     }
@@ -73,11 +73,11 @@ public class BookDao implements Dao<Book> {
                     break;
 
                 case UPDATE:
-                    session.update(books.get(i));
+                    session.merge(books.get(i));
                     break;
 
                 case DELETE:
-                    session.delete(books.get(i));
+                    session.remove(books.get(i));
                     break;
             }
 
@@ -127,7 +127,7 @@ public class BookDao implements Dao<Book> {
     private void executeQuery(String query) {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
-        session.createNativeQuery(query).executeUpdate();
+        session.createNamedMutationQuery(query).executeUpdate();
         session.getTransaction().commit();
     }
 
