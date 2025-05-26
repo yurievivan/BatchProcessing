@@ -26,11 +26,17 @@ public class BookDao implements Dao<Book> {
         DELETE
     }
 
+    private final boolean useStatelessSession;
+
+    public BookDao(boolean useStatelessSession) {
+        this.useStatelessSession = useStatelessSession;
+    }
+
     @Override
     public Book getBook(long id) {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
-        Book book = session.get(Book.class, id);
+        Book book = session.find(Book.class, id);
         session.getTransaction().commit();
         return book;
     }
@@ -46,20 +52,29 @@ public class BookDao implements Dao<Book> {
 
     @Override
     public void insertBooks(List<Book> books) {
-        executeBatchQueries(DML.INSERT, books);
-        //executeBatchWithStateless(DML.INSERT, books);
+        if (useStatelessSession) {
+            executeBatchWithStateless(DML.INSERT, books);
+        } else {
+            executeBatchQueries(DML.INSERT, books);
+        }
     }
 
     @Override
     public void updateBooks(List<Book> books) {
-        executeBatchQueries(DML.UPDATE, books);
-        //executeBatchWithStateless(DML.UPDATE, books);
+        if (useStatelessSession) {
+            executeBatchWithStateless(DML.UPDATE, books);
+        } else {
+            executeBatchQueries(DML.UPDATE, books);
+        }
     }
 
     @Override
     public void deleteBooks(List<Book> books) {
-        executeBatchQueries(DML.DELETE, books);
-        //executeBatchWithStateless(DML.DELETE, books);
+        if (useStatelessSession) {
+            executeBatchWithStateless(DML.DELETE, books);
+        } else {
+            executeBatchQueries(DML.DELETE, books);
+        }
     }
 
     private void executeBatchQueries(DML dml, List<Book> books) {
@@ -68,17 +83,11 @@ public class BookDao implements Dao<Book> {
         transaction.begin();
         for (int i = 0; i < books.size(); i++) {
             switch (dml) {
-                case INSERT:
-                    session.persist(books.get(i));
-                    break;
+                case INSERT -> session.persist(books.get(i));
 
-                case UPDATE:
-                    session.merge(books.get(i));
-                    break;
+                case UPDATE -> session.merge(books.get(i));
 
-                case DELETE:
-                    session.remove(books.get(i));
-                    break;
+                case DELETE -> session.remove(books.get(i));
             }
 
             if ((i + 1) % BATCH_SIZE == 0) {
@@ -94,22 +103,14 @@ public class BookDao implements Dao<Book> {
         try (StatelessSession session = HibernateUtil.getSessionFactory().openStatelessSession()) {
             Transaction transaction = session.getTransaction();
             transaction.begin();
-            for (int i = 0; i < books.size(); i++) {
-                switch (dml) {
-                    case INSERT:
-                        session.insert(books.get(i));
-                        break;
+            switch (dml) {
+                case INSERT -> session.insertMultiple(books);
 
-                    case UPDATE:
-                        session.update(books.get(i));
-                        break;
+                case UPDATE -> session.updateMultiple(books);
 
-                    case DELETE:
-                        session.delete(books.get(i));
-                        break;
-                }
-
+                case DELETE -> session.deleteMultiple(books);
             }
+
             transaction.commit();
         }
     }

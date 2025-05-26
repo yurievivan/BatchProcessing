@@ -7,8 +7,8 @@
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
     </properties>
     
     <dependencies>
@@ -21,7 +21,7 @@
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>6.2.2.Final</version>
+            <version>7.0.0.Final</version>
         </dependency>
         
         <!-- Hibernate c3p0 connection pool -->
@@ -29,7 +29,7 @@
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-c3p0</artifactId>
-            <version>6.2.2.Final</version>
+            <version>7.0.0.Final</version>
         </dependency>
         
         <dependency>

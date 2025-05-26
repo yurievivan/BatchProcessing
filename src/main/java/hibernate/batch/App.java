@@ -8,7 +8,7 @@ public class App {
 
     public static void main(String... args) {
         try {
-            Dao dao = new BookDao();
+            Dao dao = new BookDao(true);
             List<Book> books = new ArrayList<>();
 
             // - - - - - - - - - - - - - - Hibernate/JPA Batch Insert example - - - - - - - - - - - -
